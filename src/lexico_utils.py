@@ -10,14 +10,11 @@ def classificar(string):
         string in reservadas
     ):
         resposta.append(Token(string, string))
-    elif is_identif(string):
-        resposta.append(Token("identificador", string))
-    elif is_number(string):
-        resposta.append(Token("numero", string))
-    else:
+    else:      
         sinal = None
         word = []
         tokens = []
+        
         if string[0] in sinais:
             sinal = True
         else:
@@ -32,38 +29,23 @@ def classificar(string):
                 if sinal:
                     resposta.append(Token("".join(word), "".join(word)))
                 else:
-                    resposta.append(Token("string", "".join(word)))
+                    for char in word:
+                        if char in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                            resposta.append(Token("digito", char))
+                        else:
+                            resposta.append(Token("letra", char))
                 sinal = not sinal
                 word = [c]
         if sinal:
             resposta.append(Token("".join(word), "".join(word)))
         else:
-            word =  "".join(word)
-            if is_number(word):
-                resposta.append(Token("numero", word))
-            elif word in reservadas:
-                resposta.append(Token(word, word))
-            else:
-                resposta.append(Token("string",word))
+            for char in word:
+                if char in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                    resposta.append(Token("digito", char))
+                else:
+                    resposta.append(Token("letra", char))
 
     return resposta
-
-def is_number(string):
-    try:
-        float(string)
-        return True
-    except:
-        return False
-
-def is_identif(string):
-    identificador = re.match("[A-Za-z][0-9]", string)
-    if identificador:
-        if identificador == string:
-            return True
-        else:
-            return False
-    else:
-        return False
 
 def quebrar(linha):
     lista = re.compile("(\t)+|(\ )+").split(linha.strip())

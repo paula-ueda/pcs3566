@@ -7,9 +7,8 @@ class Token:
         if (
             tipo in sinais or
             tipo in reservadas or
-            tipo == "identificador" or
-            tipo == "numero" or
-            tipo == "string"
+            tipo == "letra" or
+            tipo == "digito"
         ):
             self.tipo = tipo
             self.nome = nome
