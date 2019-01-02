@@ -1,11 +1,10 @@
-from sinais import sinais
-from reservadas import reservadas
+from tokens_lists import sinais, reservadas
 
 
 class Token:
     def __init__(self, tipo, nome):
         if (
-            tipo in sinais or
+            tipo == "especial" or
             tipo in reservadas or
             tipo == "letra" or
             tipo == "digito"

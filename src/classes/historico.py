@@ -10,10 +10,18 @@ class Historico():
             }
         )
     
-    def tira():
+    def tira(self):
         if self.lista:
             acontecimento = self.lista[-1]
             del(self.lista[-1])
             return acontecimento
         else:
             return None
+
+    def mostra(self):
+        print("\nHISTORICO")
+        for item in self.lista:
+            print(
+                f"Origem: {item['estado_origem'].stringfy()} | "
+                f"Transicao_ID: {item['transicao_index']}"
+            )

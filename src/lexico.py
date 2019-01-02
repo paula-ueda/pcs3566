@@ -1,7 +1,6 @@
 import queue
-from evento import Evento
-from linha_tokens import Linha_tokens
-from lexico_utils import *
+from classes import Evento, Linha_tokens
+from utils import lexico_classificar, lexico_quebrar
 
 
 def leitura(queue_leitura, queue_linha, queue_lista):
@@ -59,7 +58,7 @@ def analisa_linha(queue_leitura, queue_linha, queue_lista):
             queue_linha.put(novo_evento)
         elif evento.metodo == "quebrar":
             params["linha"] = str(evento.linha)
-            lista = quebrar(evento.linha)
+            lista = lexico_quebrar(evento.linha)
             params["lista"] = lista
             novo_evento = Evento(None, **params)
             queue_lista.put(novo_evento)
@@ -83,7 +82,7 @@ def analisa_lista(queue_leitura, queue_linha, queue_lista):
             novo_evento = Evento("classificar", arg=string,**params)
             queue_lista.put(novo_evento)
         elif evento.metodo == "classificar":
-            token = classificar(evento.arg)
+            token = lexico_classificar(evento.arg)
             if "linha_analisada" not in params:
                 params["linha_analisada"] = []
             params["linha_analisada"]+=(token)

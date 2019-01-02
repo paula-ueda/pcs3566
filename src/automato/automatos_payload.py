@@ -1,9 +1,10 @@
-from transicao import *
-from estado import *
+from classes import Transicao, Estado
+
+
 payload = {
     "program": {
-        "estados": [0, 1, 2, 3],
-        "final": [3],
+        "estados": [0, 1, 2, 3, 4],
+        "final": [4],
         "transicoes": {
             "0": [
                 Transicao(
@@ -15,16 +16,10 @@ payload = {
             ],
             "1": [
                 Transicao(
-                    "entra_submaquina",
-                    Estado("program", 1),
-                    Estado("program", 1),
-                    submaquina="bstatement"
-                ),
-                Transicao(
-                    "entra_submaquina",
+                    "consome_token",
                     Estado("program", 1),
                     Estado("program", 2),
-                    submaquina="int"
+                    token=(True, "EOF")
                 )
             ],
             "2": [
@@ -32,13 +27,27 @@ payload = {
                     "consome_token",
                     Estado("program", 2),
                     Estado("program", 3),
-                    token=(True, "END")
+                    token=(True, "EOF")
+                ),
+                Transicao(
+                    "entra_submaquina",
+                    Estado("program", 2),
+                    Estado("program", 1),
+                    submaquina="bstatement"
                 )
             ],
             "3": [
                 Transicao(
-                    "sai_submaquina",
+                    "consome_token",
                     Estado("program", 3),
+                    Estado("program", 4),
+                    token=(True, "END")
+                )
+            ],
+            "4": [
+                Transicao(
+                    "sai_submaquina",
+                    Estado("program", 4),
                     None
                 ),
             ]
@@ -48,13 +57,13 @@ payload = {
         "estados": [0, 1, 2],
         "final": [2],
         "transicoes": {
-            "0": [
+            "0":[
                 Transicao(
                     "entra_submaquina",
                     Estado("bstatement", 0),
                     Estado("bstatement", 1),
                     submaquina="int"
-                )
+                ),
             ],
             "1": [
                 Transicao(
@@ -104,18 +113,6 @@ payload = {
                     Estado("bstatement", 1),
                     Estado("bstatement", 2),
                     submaquina="next"
-                ),
-                Transicao(
-                    "entra_submaquina",
-                    Estado("bstatement", 1),
-                    Estado("bstatement", 2),
-                    submaquina="dim"
-                ),
-                Transicao(
-                    "entra_submaquina",
-                    Estado("bstatement", 1),
-                    Estado("bstatement", 2),
-                    submaquina="def"
                 ),
                 Transicao(
                     "entra_submaquina",
@@ -212,14 +209,14 @@ payload = {
                 Transicao(
                     "consome_token",
                     Estado("var", 1),
-                    Estado("var", 2),
-                    token=(False, "digito")
+                    Estado("var", 4),
+                    token=(True, "(")
                 ),
                 Transicao(
                     "consome_token",
                     Estado("var", 1),
-                    Estado("var", 4),
-                    token=(True, "(")
+                    Estado("var", 2),
+                    token=(False, "digito")
                 ),
             ],
             "2": [
@@ -233,14 +230,14 @@ payload = {
                 Transicao(
                     "consome_token",
                     Estado("var", 3),
-                    Estado("var", 2),
-                    token=(True, ")")
+                    Estado("var", 4),
+                    token=(True, ",")
                 ),
                 Transicao(
                     "consome_token",
                     Estado("var", 3),
-                    Estado("var", 4),
-                    token=(True, ",")
+                    Estado("var", 2),
+                    token=(True, ")")
                 ),
             ],
             "4": [
@@ -339,18 +336,6 @@ payload = {
                     Estado("eb", 3),
                     submaquina="var"
                 ),
-                Transicao(
-                    "entra_submaquina",
-                    Estado("eb", 0),
-                    Estado("eb", 4),
-                    submaquina="fn"
-                ),
-                Transicao(
-                    "entra_submaquina",
-                    Estado("eb", 0),
-                    Estado("eb", 5),
-                    submaquina="predef"
-                ),
             ],
             "1": [
                 Transicao(
@@ -372,113 +357,6 @@ payload = {
                 Transicao(
                     "sai_submaquina",
                     Estado("eb", 3),
-                    None
-                ),
-            ],
-            "4": [
-                Transicao(
-                    "consome_token",
-                    Estado("eb", 4),
-                    Estado("eb", 5),
-                    token=(False, "letra")
-                ),
-            ],
-            "5": [
-                Transicao(
-                    "consome_token",
-                    Estado("eb", 0),
-                    Estado("eb", 1),
-                    token=(True, "(")
-                ),
-            ],
-            "6": [
-                Transicao(
-                    "entra_submaquina",
-                    Estado("eb", 6),
-                    Estado("eb", 7),
-                    submaquina="exp"
-                ),
-            ],
-            "7": [
-                Transicao(
-                    "consome_token",
-                    Estado("eb", 7),
-                    Estado("eb", 3),
-                    token=(True, ")")
-                ),
-            ],
-        }
-    },
-    "predef": {
-        "estados": [0, 1],
-        "final": [1],
-        "transicoes": {
-            "0": [
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "SIN")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "COS")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "TAN")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "ATN")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "EXP")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "ABS")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "LOG")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "SQR")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "INT")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("predef", 0),
-                    Estado("predef", 1),
-                    token=(True, "RND")
-                ),
-            ],
-            "1": [
-                Transicao(
-                    "sai_submaquina",
-                    Estado("predef", 1),
                     None
                 ),
             ],
@@ -571,8 +449,8 @@ payload = {
         }
     },
     "print": {
-        "estados": [0, 1, 2, 3, 4],
-        "final": [1, 2, 3],
+        "estados": [0, 1, 2],
+        "final": [2],
         "transicoes": {
             "0": [
                 Transicao(
@@ -584,21 +462,10 @@ payload = {
             ],
             "1": [
                 Transicao(
-                    "consome_token",
-                    Estado("print", 1),
-                    Estado("print", 2),
-                    token=(True, ",")
-                ),
-                Transicao(
                     "entra_submaquina",
                     Estado("print", 1),
-                    Estado("print", 3),
+                    Estado("print", 2),
                     submaquina="pitem"
-                ),
-                Transicao(
-                    "sai_submaquina",
-                    Estado("print", 1),
-                    None
                 ),
             ],
             "2": [
@@ -606,27 +473,6 @@ payload = {
                     "sai_submaquina",
                     Estado("print", 2),
                     None
-                ),
-            ],
-            "3": [
-                Transicao(
-                    "consome_token",
-                    Estado("print", 3),
-                    Estado("print", 4),
-                    token=(True, "-")
-                ),
-                Transicao(
-                    "sai_submaquina",
-                    Estado("print", 3),
-                    None
-                ),
-            ],
-            "4": [
-                Transicao(
-                    "entra_submaquina",
-                    Estado("print", 3),
-                    Estado("print", 4),
-                    submaquina="pitem"
                 ),
             ]
         }
@@ -786,7 +632,6 @@ payload = {
                     Estado("if", 3),
                     token=(True, "=")
                 ),
-
             ],
             "3": [
                 Transicao(
@@ -881,7 +726,7 @@ payload = {
                 Transicao(
                     "entra_submaquina",
                     Estado("for", 5),
-                    Estado("for", 6),
+                    Estado("for", 9),
                     submaquina="exp"
                 ),
             ],
@@ -959,163 +804,6 @@ payload = {
                     None
                 ),
             ]
-        }
-    },
-    "dim": {
-        "estados": [0, 1, 2, 3, 4, 5, 6],
-        "final": [6],
-        "transicoes": {
-            "0": [
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 0),
-                    Estado("dim", 1),
-                    token=(True, "DIM")
-                ),
-            ],
-            "1": [
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 1),
-                    Estado("dim", 2),
-                    token=(False, "letra")
-                ),
-            ],
-            "2": [
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 2),
-                    Estado("dim", 3),
-                    token=(True, "(")
-                ),
-            ],
-            "3": [
-                Transicao(
-                    "entra_submaquina",
-                    Estado("dim", 3),
-                    Estado("dim", 4),
-                    submaquina="int"
-                ),
-            ],
-            "4": [
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 4),
-                    Estado("dim", 5),
-                    token=(True, ",")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 4),
-                    Estado("dim", 6),
-                    token=(True, ")")
-                ),
-
-            ],
-            "5": [
-                Transicao(
-                    "entra_submaquina",
-                    Estado("dim", 5),
-                    Estado("dim", 4),
-                    submaquina="int"
-                ),
-            ],
-            "6": [
-                Transicao(
-                    "consome_token",
-                    Estado("dim", 6),
-                    Estado("dim", 1),
-                    token=(True, ",")
-                ),
-                Transicao(
-                    "sai_submaquina",
-                    Estado("dim", 6),
-                    None
-                ),
-            ],
-        }
-    },
-    "def": {
-        "estados": [0, 1, 2, 3, 4, 5, 6, 7, 8],
-        "final": [8],
-        "transicoes": {
-            "0": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 0),
-                    Estado("def", 1),
-                    token=(True, "DEF FN")
-                ),
-            ],
-            "1": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 1),
-                    Estado("def", 2),
-                    token=(False, "letra")
-                ),
-            ],
-            "2": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 2),
-                    Estado("def", 3),
-                    token=(True, "(")
-                ),
-            ],
-            "3": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 3),
-                    Estado("def", 4),
-                    token=(False, "letra")
-                ),
-            ],
-            "4": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 4),
-                    Estado("def", 5),
-                    token=(False, "digito")
-                ),
-                Transicao(
-                    "consome_token",
-                    Estado("def", 4),
-                    Estado("def", 6),
-                    token=(True, ")")
-                ),
-            ],
-            "5": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 5),
-                    Estado("def", 6),
-                    token=(True, ")")
-                ),
-            ],
-            "6": [
-                Transicao(
-                    "consome_token",
-                    Estado("def", 6),
-                    Estado("def", 7),
-                    token=(True, "=")
-                ),
-            ],
-            "7": [
-                Transicao(
-                    "entra_submaquina",
-                    Estado("def", 7),
-                    Estado("def", 8),
-                    submaquina="exp"
-                ),
-            ],
-            "8": [
-                Transicao(
-                    "sai_submaquina",
-                    Estado("def", 8),
-                    None
-                ),
-            ],
         }
     },
     "gosub": {
@@ -1224,7 +912,7 @@ payload = {
     },
     "num": {
         "estados": [0, 1, 2, 3, 4, 5, 6, 7],
-        "final": [2, 5, 6],
+        "final": [1, 2, 5, 6],
         "transicoes": {
             "0": [
                 Transicao(
@@ -1238,7 +926,7 @@ payload = {
                     Estado("num", 0),
                     Estado("num", 1),
                     submaquina="int"
-                ),
+                ),  
             ],
             "1": [
                 Transicao(
@@ -1246,6 +934,11 @@ payload = {
                     Estado("num", 1),
                     Estado("num", 2),
                     token=(True, ".")
+                ),
+                Transicao(
+                    "sai_submaquina",
+                    Estado("num", 1),
+                    None
                 ),
             ],
             "2": [
@@ -1375,14 +1068,20 @@ payload = {
             Transicao(
                     "consome_token",
                     Estado("character", 0),
-                    Estado("character", "letra"),
-                    token=(False, "+")
+                    Estado("character", 1),
+                    token=(False, "letra")
                 ),
                 Transicao(
                     "consome_token",
                     Estado("character", 0),
                     Estado("character", 1),
                     token=(False, "digito")
+                ),
+                Transicao(
+                    "consome_token",
+                    Estado("character", 0),
+                    Estado("character", 1),
+                    token=(False, "especial")
                 ),
         ],
         "1": [

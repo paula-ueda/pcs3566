@@ -27,5 +27,6 @@ reservadas = [
     "DEF FN",
     "GOSUB",
     "RETURN",
-    "REM"
+    "REM",
+    "EOF"
 ]
